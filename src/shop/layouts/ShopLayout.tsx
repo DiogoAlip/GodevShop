@@ -1,3 +1,10 @@
+import { Outlet } from "react-router";
+
 export const ShopLayout = () => {
-  return <div>ShopLayout</div>;
+  return (
+    <>
+      <h1>ShopLayout</h1>
+      <Outlet />
+    </>
+  );
 };
