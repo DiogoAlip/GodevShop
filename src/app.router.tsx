@@ -13,7 +13,7 @@ import { DashboardPage } from "./admin/pages/dashboard/DashboardPage";
 import { AdminProductPage } from "./admin/pages/products/AdminProductPage";
 
 const AuthLayout = lazy(() => import("./auth/layouts/AuthLayout"));
-const AdminLayout = lazy(() => import("./auth/layouts/AuthLayout"));
+const AdminLayout = lazy(() => import("./admin/layouts/AdminLayout"));
 
 export const AppRouter = createBrowserRouter([
   {
