@@ -12,6 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { CustomLogo } from "@/shop/components/CustomLogo";
+import { useLocation } from "react-router";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -22,9 +23,11 @@ export const AdminSidebar: React.FC<SidebarProps> = ({
   isCollapsed,
   onToggle,
 }) => {
+  const { pathname } = useLocation();
+
   const menuItems = [
-    { icon: Home, label: "Dashboard", active: true },
-    { icon: BarChart3, label: "Analytics" },
+    { icon: Home, label: "Dashboard", to: "/admin" },
+    { icon: BarChart3, label: "Products", to: "/admin/products/random" },
     { icon: Users, label: "Users" },
     { icon: ShoppingCart, label: "Orders" },
     { icon: FileText, label: "Reports" },
@@ -32,6 +35,8 @@ export const AdminSidebar: React.FC<SidebarProps> = ({
     { icon: Settings, label: "Settings" },
     { icon: HelpCircle, label: "Help" },
   ];
+
+  const isActiveRoute = (to: string) => pathname === to;
 
   return (
     <div
@@ -58,9 +63,9 @@ export const AdminSidebar: React.FC<SidebarProps> = ({
             return (
               <li key={index}>
                 <a
-                  href="#"
+                  href={item.to || "/admin"}
                   className={`flex items-center space-x-2 px-2 py-2 rounded-lg transition-all duration-200 group ${
-                    item.active
+                    isActiveRoute(item.to || "/")
                       ? "bg-blue-50 text-blue-600 border-r-2 border-blue-600"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   }`}
