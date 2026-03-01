@@ -118,7 +118,7 @@ export const AdminProductPage = () => {
     <>
       <div className="flex justify-between items-center">
         <AdminTitle title={productTitle} subtitle={productSubtitle} />
-        <div className="flex justify-end mb-10 gap-4">
+        <div className="flex justify-end gap-4">
           <Button variant="outline">
             <Link to="/admin/products" className="flex items-center gap-2">
               <X className="w-4 h-4" />
