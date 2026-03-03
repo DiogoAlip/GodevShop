@@ -1,8 +1,26 @@
 import { GoDevApi } from "@/api/GodevApi";
 import type { ProductResponse } from "@/interfaces/products.response";
 
-export const getProductsAction = async (): Promise<ProductResponse> => {
-  const { data } = await GoDevApi.get<ProductResponse>("/products");
+interface Options {
+  limit?: number | string | undefined;
+  offset?: number | string | undefined;
+  sizes?: string;
+  gender?: string;
+}
+
+export const getProductsAction = async (
+  options: Options,
+): Promise<ProductResponse> => {
+  const { limit, offset, sizes, gender } = options;
+
+  const { data } = await GoDevApi.get<ProductResponse>("/products", {
+    params: {
+      limit,
+      offset,
+      sizes,
+      gender,
+    },
+  });
 
   const productsWithImageURLs = data.products.map((product) => ({
     ...product,
