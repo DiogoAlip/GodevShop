@@ -6,12 +6,15 @@ interface Options {
   offset?: number | string | undefined;
   sizes?: string;
   gender?: string;
+  minPrice?: number | undefined;
+  maxPrice?: number | undefined;
+  q?: string | undefined;
 }
 
 export const getProductsAction = async (
   options: Options,
 ): Promise<ProductResponse> => {
-  const { limit, offset, sizes, gender } = options;
+  const { limit, offset, sizes, gender, minPrice, maxPrice, q } = options;
 
   const { data } = await GoDevApi.get<ProductResponse>("/products", {
     params: {
@@ -19,6 +22,9 @@ export const getProductsAction = async (
       offset,
       sizes,
       gender,
+      minPrice,
+      maxPrice,
+      q,
     },
   });
 
