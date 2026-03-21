@@ -5,7 +5,7 @@ import { AdminTitle } from "@/admin/components/AdminTitle";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/interfaces/product.interface";
 import type { Size } from "@/interfaces/product.interface";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { cn } from "@/lib/utils";
 
 const availableSizes = ["XS", "S", "M", "L", "XL", "XXL"] as Size[];
@@ -22,7 +22,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
   const labelInputRef = useRef<HTMLInputElement>(null);
 
   const {
-    watch,
+    control,
     setValue,
     getValues,
     register,
@@ -32,9 +32,9 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
     defaultValues: product,
   });
 
-  const selectedSizes = watch("sizes");
-  const selectedTags = watch("tags");
-  const currentStock = watch("stock");
+  const watchSizes = useWatch({ control, name: "sizes" });
+  const watchTags = useWatch({ control, name: "tags" });
+  const watchStock = useWatch({ control, name: "stock" });
 
   const addTag = () => {
     const newTag = labelInputRef.current!.value;
@@ -277,7 +277,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                       className={cn(
                         "inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200",
                         {
-                          hidden: !selectedSizes.includes(size),
+                          hidden: !watchSizes.includes(size),
                         },
                       )}
                     >
@@ -303,7 +303,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                       onClick={() => addSize(size)}
                       disabled={getValues("sizes").includes(size)}
                       className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
-                        selectedSizes.includes(size)
+                        watchSizes.includes(size)
                           ? "bg-slate-100 text-slate-400 cursor-not-allowed"
                           : "bg-slate-200 text-slate-700 hover:bg-slate-300 cursor-pointer"
                       }`}
@@ -323,7 +323,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
 
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-2">
-                  {selectedTags.map((tag) => (
+                  {watchTags.map((tag) => (
                     <span
                       key={tag}
                       className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200"
@@ -454,16 +454,16 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                   </span>
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      currentStock > 5
+                      watchStock > 5
                         ? "bg-green-100 text-green-800"
-                        : currentStock > 0
+                        : watchStock > 0
                           ? "bg-yellow-100 text-yellow-800"
                           : "bg-red-100 text-red-800"
                     }`}
                   >
-                    {currentStock > 5
+                    {watchStock > 5
                       ? "En stock"
-                      : currentStock > 0
+                      : watchStock > 0
                         ? "Bajo stock"
                         : "Sin stock"}
                   </span>
@@ -483,7 +483,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     Tallas disponibles
                   </span>
                   <span className="text-sm text-slate-600">
-                    {selectedSizes.length} tallas
+                    {watchSizes.length} tallas
                   </span>
                 </div>
               </div>
