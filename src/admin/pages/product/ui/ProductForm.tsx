@@ -14,9 +14,17 @@ interface Props {
   title: string;
   subTitle: string;
   product: Product;
+  onSubmit: (productLike: Partial<Product>) => Promise<void>;
+  isPending: boolean;
 }
 
-export const ProductForm = ({ title, subTitle, product }: Props) => {
+export const ProductForm = ({
+  title,
+  subTitle,
+  product,
+  onSubmit,
+  isPending,
+}: Props) => {
   const [dragActive, setDragActive] = useState(false);
 
   const labelInputRef = useRef<HTMLInputElement>(null);
@@ -31,6 +39,8 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
   } = useForm({
     defaultValues: product,
   });
+
+  console.log(isPending);
 
   const watchSizes = useWatch({ control, name: "sizes" });
   const watchTags = useWatch({ control, name: "tags" });
@@ -86,11 +96,6 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
     console.log(files);
   };
 
-  //TODO: remove this funciton
-  const onSubmit = (productLike: Product) => {
-    console.log("onSubmit", productLike);
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex justify-between items-center">
@@ -103,7 +108,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
             </Link>
           </Button>
 
-          <Button>
+          <Button type="submit" disabled={isPending}>
             <SaveAll className="w-4 h-4" />
             Guardar cambios
           </Button>
