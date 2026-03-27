@@ -60,7 +60,7 @@ export const AppRouter = createHashRouter([
     ],
   },
   {
-    path: "/admin",
+    path: "admin",
     element: (
       <AdminRoute>
         <AdminLayout />

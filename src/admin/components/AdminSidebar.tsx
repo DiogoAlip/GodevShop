@@ -33,8 +33,8 @@ export const AdminSidebar: React.FC<SidebarProps> = ({
     .slice(0, 2);
 
   const menuItems = [
-    { icon: Home, label: "Dashboard", to: "/admin" },
-    { icon: BarChart3, label: "Products", to: "/admin/products" },
+    { icon: Home, label: "Dashboard", to: "/#/admin" },
+    { icon: BarChart3, label: "Products", to: "/#/admin/products" },
     { icon: Users, label: "Users" },
     { icon: ShoppingCart, label: "Orders" },
     { icon: FileText, label: "Reports" },
@@ -43,10 +43,13 @@ export const AdminSidebar: React.FC<SidebarProps> = ({
     { icon: HelpCircle, label: "Help" },
   ];
 
-  const isActiveRoute = (to: string) =>
-    pathname.includes("/admin/products/") && to === "/admin/products"
+  const isActiveRoute = (to: string) => {
+    const withoutHash = to.slice(2);
+    return pathname.includes("/admin/products/") &&
+      withoutHash === "/admin/products"
       ? true
-      : pathname === to;
+      : pathname === withoutHash;
+  };
 
   return (
     <>
