@@ -1,11 +1,11 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router";
+import { useForm, useWatch } from "react-hook-form";
 import { X, SaveAll, Tag, Plus, Upload } from "lucide-react";
 import { AdminTitle } from "@/admin/components/AdminTitle";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/interfaces/product.interface";
 import type { Size } from "@/interfaces/product.interface";
-import { useForm, useWatch } from "react-hook-form";
 import { cn } from "@/lib/utils";
 
 const availableSizes = ["XS", "S", "M", "L", "XL", "XXL"] as Size[];
@@ -14,8 +14,14 @@ interface Props {
   title: string;
   subTitle: string;
   product: Product;
-  onSubmit: (productLike: Partial<Product>) => Promise<void>;
+  onSubmit: (
+    productLike: Partial<Product> & { files?: File[] },
+  ) => Promise<void>;
   isPending: boolean;
+}
+
+interface FormInputs extends Product {
+  files?: File[];
 }
 
 export const ProductForm = ({
@@ -27,10 +33,6 @@ export const ProductForm = ({
 }: Props) => {
   const [dragActive, setDragActive] = useState(false);
 
-  const labelInputRef = useRef<HTMLInputElement>(null);
-
-  const [files, setFiles] = useState<File[]>([]);
-
   const {
     control,
     setValue,
@@ -38,11 +40,18 @@ export const ProductForm = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormInputs>({
     defaultValues: product,
   });
 
-  console.log(isPending);
+  const labelInputRef = useRef<HTMLInputElement>(null);
+
+  const [files, setFiles] = useState<File[]>([]);
+
+  useEffect(() => {
+    const setFilesFunction = async () => await setFiles([]);
+    setFilesFunction();
+  }, [product]);
 
   const watchSizes = useWatch({ control, name: "sizes" });
   const watchTags = useWatch({ control, name: "tags" });
@@ -94,6 +103,9 @@ export const ProductForm = ({
     if (!files) return;
 
     setFiles((prev) => [...prev, ...Array.from(files)]);
+
+    const currentFiles = getValues("files") || [];
+    setValue("files", [...currentFiles, ...Array.from(files)]);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,6 +114,9 @@ export const ProductForm = ({
     if (!files) return;
 
     setFiles((prev) => [...prev, ...Array.from(files)]);
+
+    const currentFiles = getValues("files") || [];
+    setValue("files", [...currentFiles, ...Array.from(files)]);
   };
 
   return (
