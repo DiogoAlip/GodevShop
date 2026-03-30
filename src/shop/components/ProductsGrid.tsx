@@ -63,7 +63,6 @@ export const ProductsGrid = ({ products }: Props) => {
             </div>
           </div>
         </div>
-
         <div className="flex gap-8">
           {/* Filters Sidebar - Desktop */}
           <div className="hidden lg:block">
